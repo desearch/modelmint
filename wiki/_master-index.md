@@ -22,6 +22,7 @@
 - [[modelmint/business-model]] — Pricing, target customers, GTM, competitive landscape
 - [[modelmint/validation-plan]] — 4-week validation sprint + 6-week MVP + go/no-go criteria
 - [[modelmint/moat-analysis]] — What compounds, vernacular wedge, critical risks
+- [[modelmint/executive-review]] — Senior AI exec evaluation: feasibility 6/10, blind spots, revised MVP sequence
 
 **AI Techniques:**
 - [[ai-techniques/rag-vs-finetuning]] — When to use each, hybrid patterns

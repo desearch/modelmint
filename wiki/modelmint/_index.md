@@ -19,3 +19,4 @@ A no-code platform for domain-accurate AI — businesses upload their corpus, ge
 | [[business-model]] | Pricing tiers, target customers, GTM, competitive landscape |
 | [[validation-plan]] | 4-week validation sprint, 6-week MVP roadmap, go/no-go criteria |
 | [[moat-analysis]] | What compounds over time, vernacular wedge, critical risks and mitigations |
+| [[executive-review]] | Pragmatic Senior AI Executive evaluation — feasibility scores, blind spots, revised MVP path |
