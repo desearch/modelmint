@@ -1,98 +1,167 @@
 ---
 title: ModelMint — Validation Plan & MVP
 tags: [modelmint, validation, mvp, roadmap]
+date: 2026-04-09
+---
+
+## The Constraint Has Shifted
+
+The engineering questions (LoRA efficiency, vLLM scaling, synthetic data generation) are already answered. Those are known.
+
+**What actually needs to be proven:**
+1. Businesses care about *measured* accuracy — not just "better AI"
+2. They trust *your* measurement enough to act on it
+3. They are willing to pay when the measurement reveals the gap
+
+Everything else follows from these three. If these fail, no pipeline architecture saves the business.
+
 ---
 
 ## Validate Before Writing a Line of Code
 
-Three questions determine if this is a real business:
-
 **Demand-side:**
-- [ ] Will SMBs pay for a private model vs just using ChatGPT? What's the switching trigger?
-- [ ] Is the frustration with generic AI sharp enough to create urgency — or is it tolerable today?
+- [ ] Will SMBs pay for measured accuracy vs just using ChatGPT? What's the switching trigger?
+- [ ] Is the frustration with generic AI sharp enough to create urgency — or tolerable today?
 - [ ] Who inside an SMB makes this buying decision? IT? The owner? Operations?
 
 **Supply-side:**
-- [ ] What is the real cost of one fine-tuning run end-to-end at production quality?
+- [ ] What is the real quality of automated corpus ingestion on messy SMB documents (scanned PDFs, inconsistent SOPs)?
 - [ ] What adapter quality can be achieved with fully automated synthetic data — no human curation?
-- [ ] How many tenants can realistically share one A100 node before latency degrades?
+- [ ] At what failure rate does automated ingestion require human intervention?
 
 **Market-side:**
-- [ ] Why hasn't Predibase / Together AI / HuggingFace already moved here? What's the actual blocker — technical, GTM, or just attention?
-- [ ] Is the vernacular wedge (Indian languages) a durable differentiator or a 12-month window?
+- [ ] Does the free accuracy audit tool produce scores that feel intuitively believable to business owners?
+- [ ] Do users look at their score and say "this explains our problem" or "this doesn't match my experience"?
+- [ ] Is the vernacular domain accuracy gap (not language fluency) still real after Tiny Aya Fire?
 
 ---
 
-## 4-Week Validation Sprint (Before MVP)
+## Corrected MVP Sequence
 
-**Week 1-2: Demand validation**
-- 20 cold outreach messages to SMB owners (legal, healthcare, D2C) asking: *"If you could have an AI trained only on your business documents, what would you use it for — and what would you pay?"*
-- No product mention. Just discovery.
+The original plan built the model pipeline first, then the evaluation tool. **This is wrong.** The audit tool is the first product, not a lead magnet.
 
-**Week 3: Supply validation**
-- Run the full loop manually once: take a real domain corpus → generate synthetic Q&A with Claude/Gemini → QLoRA fine-tune Gemma 2B with Unsloth → serve with vLLM → benchmark quality
-- Measure: cost, time, quality score vs base model on domain questions
-- This is the technical proof-of-concept. One weekend of GPU time.
+**Why the audit tool comes first:**
+- Creates pain visibility — without it, no one buys
+- Generates ground truth datasets at zero additional cost
+- Exposes corpus quality reality before infra investment
+- If it fails to produce believable scores, the rest of the business is invalid
 
-**Week 4: Pricing signal**
-- Show a Loom demo of the manual loop to 5 warm contacts
-- Present three pricing tiers
-- Ask which tier they'd pay for *today* if it existed
-- No code needed. Wizard-of-Oz the demo if necessary.
+### Phase 1: Accuracy Audit Tool (Zero model infra required)
 
-**Decision gate:** If 3 of 20 outreach contacts express willingness to pay AND the manual loop produces measurably better domain answers than GPT-4o → build the MVP.
+**What it does:**
+1. User uploads domain corpus
+2. System generates 20-30 candidate Q&A pairs from the corpus (teacher LLM)
+3. User approves / edits / rejects pairs (the ground truth capture)
+4. System tests their *existing AI* (ChatGPT, Gemini, etc.) against the approved pairs
+5. Output: accuracy score + failure category breakdown + estimated dollar cost of wrong answers
+
+**What you learn:**
+- Whether users complete the flow without heavy drop-off
+- Whether the accuracy scores feel believable to them
+- What the real corpus looks like in the wild (OCR failures, sparse coverage, inconsistent terminology)
+- Whether any users react with: "this explains our problem — how do we fix it?"
+
+**That last reaction is your conversion trigger.** Without it, do not proceed.
+
+**Target:** 30 D2C SMBs + 10 Telugu regional businesses. Outreach message: *"Free AI accuracy audit — we'll show you exactly where your AI is getting your domain wrong, in 20 minutes."*
 
 ---
 
-## MVP Scope (Ruthless Cut)
+### Phase 2: Manual Improvement (1-2 customers, no automation)
 
-**One vertical. One pipeline. One benchmark.**
+Take the best corpus from Phase 1 — the one where the audit revealed a real, measurable gap.
 
-**Chosen vertical: D2C / E-commerce support bots**
-Reasons: fastest sales cycle, clearest ROI (deflected tickets = saved cost), corpus is simple (catalog + policy docs), no regulatory risk, high volume.
+**Manually execute the full pipeline:**
+1. Clean the corpus (fix OCR, normalize formats, remove noise — this is where the real learning happens)
+2. Generate curated Q&A dataset (human-reviewed, not just automated)
+3. Test RAG vs fine-tune vs hybrid on this specific corpus
+4. Deploy on RunPod, measure real accuracy delta, real cost, real latency
 
-**MVP deliverables — 6 weeks:**
+**Do not automate anything in Phase 2.** The manual process is how you discover what breaks, what needs human judgment, and what is safe to automate later.
 
-| Week | Deliverable |
-|---|---|
-| 1 | Teacher (Flash) → Synthetic Q&A → User Validation UI (approve/edit/reject) |
-| 2 | Judge (Sonnet) implementation — automated scoring vs ground truth |
-| 3 | Three-layer eval: visible benchmark + hidden holdout + adversarial set |
-| 4 | The Router — confidence-based switching between SLM (Gemma 2B) and frontier |
-| 5 | Vernacular pre-processing (handling Tanglish/code-switched Telugu) |
-| 6 | Pilot launch — 3 paying pilots onboarded manually (Wizard-of-Oz the UI) |
+**The real pipeline (not the pitch version):**
+```
+Documents → Cleaning → Structuring → Evaluation → Strategy Selection → Model
+```
+The first three steps are not trivial, not automated initially, and not visible in the current pitch. They must be understood before any automation is built.
 
-**No full platform. No multi-vertical. No self-serve yet.**
+**Deliverable:** One real case study with before/after accuracy scores and a cost-per-correct-answer number.
 
-**Week 6 Go/No-Go:** If blended accuracy (SLM + Router) is not within 2% of GPT-4o for the D2C pilot → do not launch dashboard, iterate on retrieval quality first.
+---
+
+### Phase 3: Controlled Automation (Months 2-3)
+
+Automate only the steps that worked cleanly and consistently in Phase 2. Keep edge cases manual.
+
+**Typically safe to automate first:**
+- Document chunking and indexing
+- Q&A pair generation (with human review step retained)
+- Baseline accuracy scoring
+
+**Keep manual for longer:**
+- Corpus cleaning and OCR correction
+- Strategy selection (RAG vs fine-tune vs hybrid)
+- Edge case query handling
+
+---
+
+### Phase 4: First Paid Engagement
+
+**Structure:** Project-based, not subscription. Fixed scope, fixed corpus, fixed evaluation set, fixed endpoint for 60 days.
+
+**Pricing:** $500-1,500 as a project fee. Do not offer recurring subscription until the customer demonstrates production dependency on the endpoint.
+
+**Conversion signal:** If the customer asks "what happens if I stop paying — do I lose the endpoint?" — that is the subscription trigger.
 
 ---
 
 ## Go / No-Go Criteria (Binary — No Partial Credit)
 
-1. **Quality gate:** Fine-tuned / RAG-optimized model scores ≥2x better than base model on domain Q&A benchmark for at least 2 of 3 pilots
-2. **Economics gate:** Total serving cost per customer <30% of what they'd pay calling GPT-4o directly for equivalent query volume
-3. **Demand gate:** At least 1 of 3 pilots converts to paid before full platform is built
+1. **Trust gate:** Accuracy audit scores are considered believable by at least 4 of 5 users who complete the audit. If scores don't feel real, the measurement system is broken.
+2. **Quality gate:** Manual pipeline improvement produces ≥2x accuracy gain over baseline for at least 2 of 3 pilot customers.
+3. **Economics gate:** Total serving cost per customer <30% of equivalent frontier API cost, *after accounting for corpus cleaning and evaluation overhead.*
+4. **Demand gate:** At least 1 of 3 pilots converts to paid before any automation is built.
 
-**If quality gate fails** → automation pipeline needs human curation in the loop. Redesign before scaling.
-**If economics gate fails** → multi-tenant LoRA model needs rework. Don't proceed to self-serve.
-**If demand gate fails** → the vertical is wrong. Not the product. Pivot to legal assistants or vernacular SME.
+**If trust gate fails** → the evaluation methodology is wrong. Fix scoring before everything else.
+**If quality gate fails** → corpus quality is the bottleneck. Add human curation to the loop permanently.
+**If economics gate fails** → the cost model is broken. Do not proceed to self-serve.
+**If demand gate fails** → the vertical is wrong. Not the product. Move to legal (highest WTP) or vernacular domain (strategic moat).
 
 ---
 
-## Pivot Options If Gates Fail
+## Corpus Quality Is the Hidden Constraint
 
-- If fine-tuning economics don't work → pivot to RAG optimization platform instead
-- If D2C vertical fails → try legal (highest WTP) or vernacular SME (strategic moat)
-- If quality can't be automated → add human curation step in the loop
+The real failure mode for Phase 1 and 2 is not model quality — it is corpus quality. Most SMB document repositories contain:
+- Scanned PDFs with poor OCR
+- Inconsistent terminology across documents
+- Outdated or contradictory policies
+- Knowledge that lives in people's heads, not in documents
+
+Estimated failure rate on real SMB corpora with fully automated ingestion: **40-60%.**
+
+**Required adjustment:** For the first 20 customers, treat corpus ingestion as a service layer. Manually clean, normalize, and structure the corpus. This is where the automation roadmap comes from — you cannot automate what you have not mapped manually.
+
+---
+
+## What "Accuracy Guarantee" Must Become
+
+Remove "guaranteed" from all communications immediately.
+
+**Replace with:**
+- "benchmarked accuracy"
+- "continuously monitored performance"
+- "measurable improvement over your current baseline"
+
+The system communicates **transparency**, not certainty. In domains like healthcare or legal, even a 1% failure rate can be unacceptable. The claim of 30% → 5% across diverse SMB corpora with automated pipelines is not defensible until you have production evidence across at least 10 customers.
 
 ---
 
 ## Key Takeaways
 
-- Validate demand before any engineering — 20 outreach messages cost nothing
-- The manual loop proof-of-concept (one weekend of GPU time) answers the supply-side question
-- Wizard-of-Oz the UI for the first 3 pilots — don't build before you know it sells
-- The go/no-go criteria are binary; no partial credit means no self-deception
+- The audit tool is the first product, not a lead magnet — if it fails, everything else is invalid
+- Phase 2 must be entirely manual — do not automate before you understand the failure modes
+- The trust gate is the most important of the four go/no-go criteria
+- "Cost per correct answer" is the metric to track internally and communicate externally
+- Corpus cleaning is a service layer for the first 20 customers — that is where the real learning lives
 
-**Related:** [[concept-evolution]] · [[business-model]] · [[evaluation-layer]]
+**Related:** [[concept-evolution]] · [[business-model]] · [[evaluation-layer]] · [[strategic-positioning]]

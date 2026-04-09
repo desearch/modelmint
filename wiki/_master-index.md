@@ -23,6 +23,7 @@
 - [[modelmint/validation-plan]] — 4-week validation sprint + 6-week MVP + go/no-go criteria
 - [[modelmint/moat-analysis]] — What compounds, vernacular wedge, critical risks
 - [[modelmint/executive-review]] — Senior AI exec evaluation: feasibility 6/10, blind spots, revised MVP sequence
+- [[modelmint/strategic-positioning]] — ModelMint vs Cohere: four strategic forks, Tiny Aya Fire impact, "Datadog for AI" identity
 
 **AI Techniques:**
 - [[ai-techniques/rag-vs-finetuning]] — When to use each, hybrid patterns

@@ -23,24 +23,25 @@ This is a **data flywheel disguised as a tooling platform.** Every customer who 
 
 ---
 
-## The Vernacular Wedge
+## The Vernacular Wedge (Updated: Tiny Aya Fire Changes the Picture)
 
-**The opportunity:** Generic frontier models on Telugu, Tamil, Marathi domain queries:
-- Hallucinate terminology
-- Miss cultural/legal context
-- Produce grammatically awkward outputs
+**New intelligence:** Cohere launched **Tiny Aya Fire** — a 3B South Asian language model with native support for Telugu, Marathi, and Bengali. This compresses the original 12-18 month window estimate.
 
-**Why a fine-tuned 2B model wins here:** Domain-specific training data in these languages is sparse in frontier labs' datasets. A fine-tuned Gemma 2B on Telugu aquaculture or AP land records will outperform GPT-4o on that domain — not in general, but specifically there.
+**Revised window:**
+- For general domain tasks (language fluency, basic QA): **6-9 months** — Tiny Aya Fire closes this fast
+- For deep domain specificity (shrimp pond disease vocabulary, AP land record mutation workflows, district court procedure terminology): **12-18 months** — this window survives because evaluation datasets for these niches don't exist anywhere yet
 
-**The window:** 12-18 months before frontier labs close it with native multilingual fine-tunes.
+**The moat that survives Tiny Aya Fire:**
+The vernacular moat is no longer "our model speaks Telugu better than Cohere's." That race is over. The moat is: **"our evaluation dataset knows what a correct Telugu aquaculture answer looks like."** Cohere provides the engine. ModelMint provides the measurement of whether the engine produced the right answer for your specific domain.
 
-**First mover in vernacular domain SLMs = proprietary evaluation datasets in languages frontier labs haven't prioritized. That is durable.**
+A farmer in Bapatla doesn't need fluent Telugu. They need correct advice about white spot disease in shrimp ponds, in Telugu. Tiny Aya Fire does not solve the domain correctness problem — it only solves the language generation problem.
 
-**Execution requirements:**
-- Terminology normalization (local domain vocabulary)
-- Code-mixed language handling (Telugu + English "Tanglish")
-- Spelling variance tolerance
-- Preprocessing pipelines, not just fine-tuning
+**What must be executed immediately:**
+- Build ground truth QA datasets for 2-3 Telugu domain niches before competitors realize this is the moat
+- Focus on domains with zero existing benchmark data: regional agritech, local logistics workflows, district court procedures
+- Terminology normalization and code-mixed language handling (Telugu + English "Tanglish") remain preprocessing requirements
+
+**The durable statement:** First mover in vernacular *domain accuracy benchmarks* = proprietary evaluation datasets in languages and niches frontier labs have not prioritized. That is durable. The language model itself is not.
 
 ---
 

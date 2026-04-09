@@ -20,3 +20,4 @@ A no-code platform for domain-accurate AI — businesses upload their corpus, ge
 | [[validation-plan]] | 4-week validation sprint, 6-week MVP roadmap, go/no-go criteria |
 | [[moat-analysis]] | What compounds over time, vernacular wedge, critical risks and mitigations |
 | [[executive-review]] | Pragmatic Senior AI Executive evaluation — feasibility scores, blind spots, revised MVP path |
+| [[strategic-positioning]] | ModelMint vs Cohere — four strategic forks, Tiny Aya Fire impact, identity as accuracy routing layer |
