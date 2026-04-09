@@ -5,9 +5,11 @@ tags: [modelmint, business, pricing, gtm, customers]
 
 ## One-Line Pitch
 
-> **"Your business knowledge, turned into an AI that answers correctly — accuracy guaranteed by benchmark."**
+> **"We measure what your AI gets wrong in your domain — and fix it."**
 
-Even sharper: *"Reduce wrong AI answers in your business workflows from 30% → <5%."*
+Supporting: *"Reduce wrong AI answers in your business workflows from 30% → <5% — benchmarked and monitored."*
+
+("Guaranteed" is removed. The system communicates transparency and measurability, not certainty. See [[strategic-positioning]].)
 
 ---
 
@@ -32,27 +34,45 @@ Not: "Improve accuracy" — But: "Reduce incorrect customer support responses fr
 
 ---
 
+## GTM Motion (Measurement-First)
+
+The selling motion follows the product sequence — audit first, improvement second.
+
+**Step 1 — Free accuracy audit (top of funnel)**
+- No model, no payment, no commitment
+- Customer uploads corpus + connects existing AI
+- Receives: accuracy score + failure category breakdown + estimated dollar cost of wrong answers per month
+- Conversion trigger: customer says "this explains our problem — how do we fix it?"
+
+**Step 2 — Paid improvement project (not subscription yet)**
+- Fixed scope, fixed corpus, fixed evaluation set
+- $500-1,500 project fee
+- Deliverable: improved accuracy score + working endpoint for 60 days
+
+**Step 3 — Subscription conversion**
+- Only when customer demonstrates production dependency on the endpoint
+- Signal: "what happens if I stop paying — do I lose the endpoint?"
+
+---
+
 ## Pricing Model
 
-**Usage-based SaaS — three levers:**
+**Primary metric: Cost per Correct Answer** — not cost per token, not cost per query. This is what SMB owners actually care about, and what survives frontier model price compression.
 
-| Lever | Logic |
-|---|---|
-| Training credits | Pay per fine-tuning run (corpus size + compute time) |
-| Inference tokens | Per-token billing on the private endpoint |
-| Seat / plan tier | Monthly base for stored adapters, versioning, dashboard |
+**Usage-based SaaS — measurement-anchored tiers:**
 
-**Indicative tiers:**
-- **Starter** — $49/mo: 1 model, 1 fine-tune/month, 1M tokens inference
-- **Growth** — $199/mo: 5 models, 5 fine-tunes/month, 10M tokens
-- **Business** — $999/mo: unlimited models, private deployment option, SLA
+| Tier | Price | What's included |
+|---|---|---|
+| **Starter** | $49/mo | Accuracy audit for 1 domain, continuous monitoring, 1M inference tokens |
+| **Growth** | $199/mo | 5 domains, improvement pipeline (RAG/fine-tune/hybrid), 10M tokens, drift alerts |
+| **Business** | $999/mo | Unlimited domains, private deployment option, SLA, fallback router |
 
-**The value argument:** Frontier API cost for 10M tokens (GPT-4o) ≈ $150-300/mo for a *generic* model. ModelMint delivers a *domain-expert* model at lower cost.
+**The value argument:** Frontier API cost for 10M tokens (GPT-4o) ≈ $150-300/mo for a *generic* model. ModelMint delivers a *domain-accurate* model + ongoing measurement at lower cost. The pricing must be anchored to accuracy improvement, not compute.
 
-**Key internal metric to track:** Cost per successful answer (not cost per token). The economics hold only if:
-- Router is efficient (SLM handles 80% of queries)
+**Key internal metric to track:** Cost per correct answer (not cost per token). The economics hold only if:
+- Router is efficient (SLM handles ~80% of queries)
 - Retraining frequency is controlled
-- Hidden cost drivers (repeated fine-tunes, synthetic data loops, eval compute) are managed
+- Hidden cost drivers (corpus cleaning, synthetic data loops, eval compute) are managed
 
 ---
 
@@ -80,10 +100,12 @@ Not: "Improve accuracy" — But: "Reduce incorrect customer support responses fr
 
 ## Key Takeaways
 
-- D2C support bots = fastest MVP vertical (simple corpus, clearest ROI, no regulatory risk, high volume)
+- The GTM motion is: free audit → paid project → subscription — in that order, no shortcuts
+- D2C support bots = fastest MVP vertical (simple corpus, clearest ROI, no regulatory risk)
 - Legal assistants = highest willingness to pay
-- Vernacular SME assistant = strategic long-term wedge
-- The value pitch must anchor to dollar cost of wrong answers, not features of the model
-- CFOs are increasingly alarmed by frontier API bills — "70% cheaper + more accurate" is a strong combined pitch
+- Vernacular SME assistant = strategic long-term moat (domain accuracy benchmarks, not language fluency)
+- Pitch anchors to dollar cost of wrong answers — the audit tool makes this concrete before any pitch
+- "Cost per correct answer" is the metric that survives model price compression; "cost per token" does not
+- Cohere/Tiny Aya Fire compete on language and model capability — ModelMint competes on measurement independence and domain accuracy — different buyer conversation
 
-**Related:** [[concept-evolution]] · [[validation-plan]] · [[moat-analysis]]
+**Related:** [[concept-evolution]] · [[validation-plan]] · [[moat-analysis]] · [[strategic-positioning]]

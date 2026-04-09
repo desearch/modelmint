@@ -9,6 +9,14 @@ tags: [modelmint, product, evaluation, accuracy]
 
 ModelMint is not building model pipelines or infra abstraction. It is building **a measurement system that customers trust.** This is what every competitor has avoided because it's hard.
 
+The evaluation layer has two forms:
+
+**Form 1 — The Audit Tool (first product, standalone)**
+A free tool that tests a business's *existing* AI against their own domain. No model training involved. Outputs an accuracy score + dollar cost of failures. This is the top-of-funnel, the trust-builder, and the ground truth data generator — all in one. See [[validation-plan]] for why this must come before any model pipeline.
+
+**Form 2 — The Continuous Benchmark (post-improvement)**
+The ongoing measurement layer after ModelMint has improved the model. Three-layer architecture below.
+
 ---
 
 ## Three-Layer Evaluation Architecture
@@ -83,4 +91,4 @@ Required mitigations:
 - Cost per successful answer is the right internal metric, not cost per token
 - Vertical-specific evaluation datasets accumulated over time are not replicable by later competitors
 
-**Related:** [[concept-evolution]] · [[product-design]] · [[moat-analysis]]
+**Related:** [[concept-evolution]] · [[moat-analysis]] · [[validation-plan]] · [[strategic-positioning]]

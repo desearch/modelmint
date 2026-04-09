@@ -3,27 +3,37 @@ title: ModelMint — Technology Stack
 tags: [modelmint, tech, infrastructure, architecture]
 ---
 
-## Full Stack (All Available Today)
+## Stack Priority by Build Phase
+
+The stack is documented here in full, but **not all of it gets built at once.** Build sequence follows the measurement-first strategy — the evaluation and corpus layers come before the model training layers.
+
+### Phase 1 — Audit Tool Only (build this first)
+
+| Layer | Tool | Role |
+|---|---|---|
+| **Corpus ingestion** | LangChain / LlamaIndex | PDF, DOCX, URL parsing — first point of corpus quality failure |
+| **Corpus cleaning** | Manual + custom scripts (Phase 1 is a service layer) | OCR correction, format normalization, noise removal |
+| **Q&A generation** | Gemini Flash / Claude Haiku API | Teacher LLM — generates candidate Q&A pairs from corpus |
+| **Evaluation scoring** | Sentence-transformers + LLM-as-judge | Scores *existing* AI against user-approved ground truth |
+| **Ground truth UI** | Next.js + Tailwind | Approve / Edit / Reject flow |
+| **Storage** | Supabase | Ground truth dataset storage per tenant |
+
+### Phase 2-3 — Model Improvement Pipeline (build after audit proves demand)
 
 | Layer | Tool | Role |
 |---|---|---|
 | **Base models** | Gemma 2B, Phi-3 Mini, Qwen 1.5B | Student model — open, production-grade, small footprint |
 | **Fine-tuning** | Unsloth + QLoRA | 2-5x faster, single GPU, 4-bit quantization |
-| **Synthetic data gen** | Gemini Flash / Claude Haiku API | Teacher LLM — ~$2-5 per 10K Q&A pairs |
-| **Data filtering** | Sentence-transformers + dedup | Quality and diversity guardrails |
+| **Data filtering** | Sentence-transformers + dedup | Quality and diversity guardrails on synthetic Q&A |
 | **Multi-tenant serving** | vLLM with LoRA hot-swap | Native multi-adapter support, sub-100ms adapter swap |
-| **Evaluation scoring** | Sentence-transformers + LLM-as-judge | The accuracy number the user sees |
 | **Quantization** | AWQ / GGUF | 2B model fits in ~1.5GB VRAM |
 | **API gateway + metering** | SupaKey / Kong + Stripe | Credential issuance, rate limiting, usage billing |
-| **Corpus ingestion** | LangChain / LlamaIndex | PDF, DOCX, URL, structured data parsing |
-| **Storage** | S3 + Supabase | Adapter versioning, dataset storage, tenant isolation |
 | **Orchestration** | Celery + Redis or Modal | Async fine-tuning job queue |
 | **Fallback routing** | Custom router layer | Hard queries → frontier API, easy → SLM |
 | **Drift monitoring** | Scheduled eval jobs + alerting | Accuracy SLA enforcement |
-| **Frontend** | Next.js + Tailwind | Simple upload → monitor → deploy UI |
 | **Infra** | Lambda Labs / RunPod / Vast.ai | Cheap GPU compute vs AWS |
 
-> No breakthrough technology needed. This is an **integration and abstraction play** over tools that already exist and work.
+> No breakthrough technology needed. This is an **integration and abstraction play** over tools that already exist and work. The sequencing is the strategy.
 
 ---
 
@@ -87,15 +97,16 @@ For Indian language markets, the edge doesn't come from fine-tuning alone — it
 - **Code-mixed language handling** — Telugu + English ("Tanglish"), Marathi + English
 - **Spelling variance tolerance** — inconsistent romanization
 
-Generic models fail here because training data is inconsistent. ModelMint's advantage: clean, domain-specific language distributions built from curated corpora.
+Generic models fail here because training data is inconsistent. ModelMint's advantage is not language generation capability — Cohere's Tiny Aya Fire closes that gap. The advantage is **domain accuracy benchmarks in these languages** — knowing what a correct answer looks like in Telugu agritech or Marathi legal contexts. The preprocessing layer enables the evaluation layer to function correctly in code-mixed inputs.
 
 ---
 
 ## Key Takeaways
 
-- The router is more important than the model — it's the core reliability engine
-- Multi-LoRA is viable but has real limits: VRAM fragmentation, cache invalidation, latency under concurrency
-- Vernacular preprocessing pipelines are required — not just fine-tuning
-- The full distillation loop (corpus → synthetic data → adapter → endpoint) is what nobody has automated end-to-end
+- Build Phase 1 (audit tool) before touching Phase 2-3 (model pipeline) — the sequence is the strategy
+- Corpus cleaning is a manual service layer for the first 20 customers, not an automated feature
+- The evaluation scoring layer (Phase 1) is the product; the model training layer (Phase 2-3) is the delivery mechanism
+- The router is more important than the model — it is model-agnostic and the proof ModelMint sits above the model wars
+- Multi-LoRA is viable but has real operational limits — do not build it before demand is proven
 
-**Related:** [[concept-evolution]] · [[evaluation-layer]] · [[knowledge-distillation]] · [[multi-lora-serving]]
+**Related:** [[concept-evolution]] · [[evaluation-layer]] · [[knowledge-distillation]] · [[multi-lora-serving]] · [[validation-plan]]

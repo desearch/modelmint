@@ -67,8 +67,9 @@ RAG pipeline (gives it WHAT to reason about)
 ## Key Takeaways
 
 - Most products wrongly default to one — the right answer is often hybrid
-- For ModelMint: strategy selector runs internally; user never chooses between RAG/fine-tune/hybrid
+- For ModelMint: the strategy selector (RAG/fine-tune/hybrid) runs internally and invisibly — the user sees only the accuracy score, not the method
+- The method is infrastructure. The measurement is the product.
 - RAG wins for dynamic corpora; fine-tuning wins for stable, style-critical domains
 - Hybrid (fine-tuned reader + RAG retrieval) is the current industry gold standard for high-performance domain bots
 
-**Related:** [[knowledge-distillation]] · [[multi-lora-serving]] · [[concept-evolution]]
+**Related:** [[knowledge-distillation]] · [[multi-lora-serving]] · [[evaluation-layer]] · [[concept-evolution]]

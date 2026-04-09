@@ -85,11 +85,17 @@ Swap adapters at runtime. Entire system runs on modest hardware.
 
 ---
 
-## The Dataset as Moat
+## Two Datasets — Two Different Strategic Weights
 
-The LLM teachers are used only once to generate data. You own the distilled SLMs — proprietary, not replicable without your domain corpus.
+Distillation produces two distinct datasets. They are not equal in strategic value:
 
-> The dataset *is* the moat. The SLM is just the runtime artifact of it.
+**Training dataset** — the synthetic Q&A pairs used to fine-tune the SLM. Useful, but increasingly commoditized as teacher LLMs get cheaper and better.
+
+**Evaluation dataset** — the user-blessed ground truth QA benchmarks that define what "correct" means in a domain. This is the moat.
+
+> The training dataset builds the model. The evaluation dataset *defines correctness* — and whoever owns that definition wins long-term.
+
+The SLM is a runtime artifact. The evaluation dataset is the compounding asset. This distinction is why ModelMint's identity is the measurement layer, not the model factory. See [[evaluation-layer]] and [[moat-analysis]].
 
 ---
 

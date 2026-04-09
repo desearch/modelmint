@@ -5,7 +5,11 @@ tags: [modelmint, strategy, positioning]
 
 ## What ModelMint Is
 
-A no-code platform where any business uploads their domain corpus and receives a private, fine-tuned SLM endpoint — trained on their knowledge, deployed instantly, billed like cloud.
+An **accuracy measurement and routing layer** that sits above AI models — measuring whether a business's AI is answering correctly in their domain, improving it when it isn't, and monitoring it continuously so it stays correct.
+
+The core question ModelMint is now answering: *"Can we measure something businesses trust enough to pay for?"*
+
+The user-facing product is not a model. It is a **benchmark** — a score that tells a business exactly where their AI is failing, what it costs them, and what an improved version scores instead.
 
 ---
 
@@ -43,7 +47,9 @@ LoRA adapter deployed on shared base → private API endpoint issued → dashboa
 
 **Core pivot:** From selling the drill (fine-tuning) to selling the hole (accuracy).
 
-**Repositioned pitch:** *"Reduce wrong AI answers in your business workflows from ~30% to under 5% — guaranteed by benchmark."*
+**Repositioned pitch:** *"Reduce wrong AI answers in your business workflows from ~30% to under 5% — benchmarked and monitored."*
+
+("Guaranteed" removed — see [[strategic-positioning]] for why this is a legal and trust liability.)
 
 **Key changes:**
 
@@ -66,12 +72,26 @@ User never chooses between RAG/fine-tune/hybrid. They see one number: **domain a
 
 ---
 
+## v0.3 — "Measurement Layer as Identity" (Current Direction)
+
+The strategic question has shifted again — from "can we build this?" to **"can we measure something businesses trust enough to pay for?"**
+
+This is the harder problem, and the right one. It means:
+- The **accuracy audit tool is the first product** — not a lead magnet, not a feature, the product
+- The model pipeline (fine-tune / RAG / hybrid) is infrastructure *behind* the measurement layer
+- ModelMint's long-term identity is **"Datadog for AI accuracy"** — model-agnostic, recurring, compounding
+- The moat is the evaluation dataset, not the adapter
+
+See [[validation-plan]] for the corrected MVP sequence and [[strategic-positioning]] for how this identity survives Cohere's Tiny Aya Fire.
+
+---
+
 ## Key Takeaways
 
-- The pivot from "model factory" to "accuracy guarantee" is the single most important reframe
-- v0.2 competes with internal AI teams; v0.1 competed with tooling platforms
-- The evaluation layer is the actual product — everything else is infrastructure behind it
-- The real asset being built is ground truth QA benchmarks per domain per language — not adapters, not infra
-- Vernacular wedge (Telugu, Tamil, Marathi) is a 12-18 month window before frontier labs close it
+- The pivot from "model factory" → "accuracy guarantee" (v0.2) was correct but incomplete
+- The current identity (v0.3): accuracy measurement and routing layer — model-agnostic, outcome-driven
+- "Guaranteed" is removed from the pitch — replaced with "benchmarked and monitored"
+- The real asset is ground truth QA benchmarks per domain per language — not adapters, not infra
+- Vernacular wedge window: 6-9 months for language fluency (Tiny Aya Fire), 12-18 months for domain accuracy benchmarks — build those datasets now
 
-**Related:** [[tech-stack]] · [[evaluation-layer]] · [[business-model]] · [[validation-plan]] · [[moat-analysis]]
+**Related:** [[evaluation-layer]] · [[tech-stack]] · [[business-model]] · [[validation-plan]] · [[moat-analysis]] · [[strategic-positioning]]
